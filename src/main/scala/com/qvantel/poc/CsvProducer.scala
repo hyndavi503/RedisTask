@@ -23,25 +23,26 @@ class CsvProducer {
   val producer: KafkaProducer[Nothing, String] =
     new KafkaProducer[Nothing, String](properties)
 
-  val topic = "csv-processor"
+  val topic = "csv-processor-2"
   println(s"Sending Records to the Topic [$topic]")
   // invoke FileUtils.readFile when required
 
   val producerThread = new Runnable {
-    override def run(): Unit =
+    override def run(): Unit = {
+      val result = FileUtils.readFile(
+        filename =
+          "C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv"
+      )
       while (true) {
-        val lines = FileUtils.readFile(
-          filename =
-            "C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv"
-        )
-        for (i <- lines) {
+        for (i <- result) {
           val record: ProducerRecord[Nothing, String] =
-            new ProducerRecord(topic, i.toString)
-          println(s"$record")
+            new ProducerRecord(topic, i)
+          println(s"P: $record")
           producer.send(record)
         }
-        Thread.sleep(20000)
+        Thread.sleep(10000)
       }
-    producer.close()
+    }
+//    producer.close()
   }
 }

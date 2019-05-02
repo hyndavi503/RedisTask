@@ -1,0 +1,3 @@
+[0m[[0m[0mdebug[0m] [0m[0mCopy resource mappings: [0m
+[0m[[0m[0mdebug[0m] [0m[0m	(C:\Home\workspace\KafkaExample\src\main\resources\MOCK_DATA.csv,C:\Home\workspace\KafkaExample\target\scala-2.12\classes\MOCK_DATA.csv)[0m
+[0m[[0m[0mdebug[0m] [0m[0m	(C:\Home\workspace\KafkaExample\src\main\resources\t1.json,C:\Home\workspace\KafkaExample\target\scala-2.12\classes\t1.json)[0m

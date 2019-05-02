@@ -27,7 +27,7 @@ class CsvConsumer {
 
   props.put("session.timeout.ms", "30000")
 
-  val topic = "csv-processor"
+  val topic = "csv-processor-2"
 
   val consumer: KafkaConsumer[Nothing, String] =
     new KafkaConsumer[Nothing, String](props)
@@ -38,14 +38,14 @@ class CsvConsumer {
     override def run(): Unit =
       while (true) {
         val records: ConsumerRecords[Nothing, String] = consumer.poll(100)
-        for (record <- records.asScala) {
-          println(record)
+        for (record <- records.asScala.toList) {
+          println("C: " + record)
           val csvData = CsvLineToCaseClassConverter.convert(record.value())
           val json = JsonUtils.convertCsvDataToJson(csvData)
           RedisClient.save(csvData.id.toString, json)
         }
+        Thread.sleep(20000)
       }
-    Thread.sleep(20000)
   }
 
 }

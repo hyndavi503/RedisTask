@@ -5,11 +5,12 @@ import scala.io.Source
 object FileUtils {
 
   def readFile(filename: String): List[String] = {
-    val line = io.Source.fromFile(
+    val gettingFile = io.Source.fromFile(
       "C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv"
     )
-    val lines = (for (line <- line.getLines()) yield line.toUpperCase).toList
-    line.close
+    val lines = gettingFile.getLines().toList.tail
+    gettingFile.close()
     lines
   }
+
 }
