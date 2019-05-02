@@ -32,7 +32,7 @@ object ProducerClass extends App {
     .fromFile("C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv")
     .getLines
     .toList
-
+  Thread.sleep(1000)
   /* val jsonStr = Source.fromResource("MOCK_DATA.csv").mkString
   val result = Json.parse("MOCK_DATA.csv")
   println(jsonStr)

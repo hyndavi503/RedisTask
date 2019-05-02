@@ -9,7 +9,7 @@ object FileReading extends App {
            "C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv"
          )
          .getLines()) {
-    println(line)
+    println(line.trim.toUpperCase)
   }
 
 }

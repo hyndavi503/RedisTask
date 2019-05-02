@@ -4,7 +4,7 @@
 		module="kafkaexample_2.12"
 		revision="0.1"
 		status="integration"
-		publication="20190426110723"
+		publication="20190502114201"
 	>
 		<description>
 		KafkaExample
@@ -34,5 +34,6 @@
 		<dependency org="org.scala-lang" name="scala-library" rev="2.12.8" conf="scala-tool->default,optional(default);compile->default(compile)"/>
 		<dependency org="org.apache.kafka" name="kafka_2.12" rev="2.2.0" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-json_2.12" rev="2.7.3" conf="compile->default(compile)"/>
+		<dependency org="redis.clients" name="jedis" rev="3.0.0" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>
