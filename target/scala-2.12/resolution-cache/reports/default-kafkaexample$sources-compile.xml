@@ -7,7 +7,7 @@
 		revision="0.1"
 		conf="compile"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool"
-		date="20190502145215"/>
+		date="20190507102648"/>
 	<dependencies>
 		<module organisation="redis.clients" name="jedis">
 			<revision name="3.0.0" status="release" pubdate="20181206162305" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/xetorthio/jedis" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="21">

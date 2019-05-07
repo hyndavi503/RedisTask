@@ -2,9 +2,9 @@ package com.qvantel.poc
 
 import java.util.Properties
 
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordMetadata}
 
-class CsvProducer {
+class CsvProducer extends Runnable {
 
   var properties = new Properties()
 
@@ -20,29 +20,32 @@ class CsvProducer {
   properties.put("value.serializer",
                  "org.apache.kafka.common.serialization.StringSerializer")
 
-  val producer: KafkaProducer[Nothing, String] =
-    new KafkaProducer[Nothing, String](properties)
+  val producer: KafkaProducer[String, String] =
+    new KafkaProducer[String, String](properties)
 
-  val topic = "csv-processor-2"
+  val topic = "csv-processor"
   println(s"Sending Records to the Topic [$topic]")
-  // invoke FileUtils.readFile when required
 
-  val producerThread = new Runnable {
-    override def run(): Unit = {
-      val result = FileUtils.readFile(
-        filename =
-          "C:/Home/workspace/KafkaExample/src/main/resources/MOCK_DATA.csv"
-      )
-      while (true) {
-        for (i <- result) {
-          val record: ProducerRecord[Nothing, String] =
-            new ProducerRecord(topic, i)
-          println(s"P: $record")
-          producer.send(record)
-        }
-        Thread.sleep(10000)
+  override def run(): Unit = {
+    val result = FileUtils.readFile(filename = "MOCK_DATA.csv")
+    while (true) {
+      for (i <- result) {
+        val record: ProducerRecord[String, String] =
+          new ProducerRecord(topic, i)
+        producer.send(
+          record,
+          (metadata: RecordMetadata, exception: Exception) => {
+            if (Option(exception).isDefined) {
+              exception.printStackTrace()
+            } else {
+              println(s"Producer => Offset : ${metadata.offset()}, Record : $i")
+            }
+          }
+        )
       }
+      Thread.sleep(10000)
     }
-//    producer.close()
   }
+
+  def terminateProducer(): Unit = producer.close()
 }

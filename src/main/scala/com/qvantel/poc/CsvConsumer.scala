@@ -6,7 +6,8 @@ import DemoProducer.KafkaScalaConsumer.consumer
 import scala.collection.JavaConverters._
 import org.apache.kafka.clients.consumer.{ConsumerRecords, KafkaConsumer}
 
-class CsvConsumer {
+class CsvConsumer extends Runnable {
+
   val props = new Properties()
 
   props.put("bootstrap.servers", "localhost:9092")
@@ -27,25 +28,22 @@ class CsvConsumer {
 
   props.put("session.timeout.ms", "30000")
 
-  val topic = "csv-processor-2"
+  val topic = "csv-processor"
 
-  val consumer: KafkaConsumer[Nothing, String] =
-    new KafkaConsumer[Nothing, String](props)
+  val consumer: KafkaConsumer[String, String] =
+    new KafkaConsumer[String, String](props)
 
   consumer.subscribe(Collections.singletonList(topic))
-
-  val consumerThread = new Runnable {
-    override def run(): Unit =
-      while (true) {
-        val records: ConsumerRecords[Nothing, String] = consumer.poll(100)
-        for (record <- records.asScala.toList) {
-          println("C: " + record)
-          val csvData = CsvLineToCaseClassConverter.convert(record.value())
-          val json = JsonUtils.convertCsvDataToJson(csvData)
-          RedisClient.save(csvData.id.toString, json)
-        }
-        Thread.sleep(20000)
+  override def run(): Unit =
+    while (true) {
+      val records: ConsumerRecords[String, String] = consumer.poll(100)
+      for (record <- records.asScala) {
+        println(s"Consumer => ${record.value()}")
+        val csvData = CsvLineToCaseClassConverter.convert(record.value())
+        val json = JsonUtils.convertCsvDataToJson(csvData)
+        RedisClient.save(csvData.id.toString, json)
       }
-  }
+    }
 
+  def terminateConsumer() = consumer.close()
 }

@@ -9,6 +9,6 @@ object RedisClient {
   def save(id: String, json: String): Unit = {
     println(s"Key: $id, Value: $json")
 
-    jedis.set(id, "JsonUtils")
+    jedis.set(id, "json")
   }
 }
